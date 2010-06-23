@@ -1,0 +1,552 @@
+diff -Nur snfit-2.1.9.orig/configure.ac snfit-2.1.9/configure.ac
+--- snfit-2.1.9.orig/configure.ac	2010-03-16 15:38:24.000000000 +0000
++++ snfit-2.1.9/configure.ac	2010-03-16 17:08:21.000000000 +0000
+@@ -10,69 +10,39 @@
+ # Checks for programs.
+ AC_PROG_LIBTOOL
+ AC_PROG_CXX
+-AC_PROG_CC
+ AC_PROG_F77
++if test x$F77 = xg77; then
++      cfortran_def=g77Fortran
++elif test x$F77 = xifort ; then
++      cfortran_def=INTEL_COMPILER
++    elif test x$F77 = xgfortran ; then
++      cfortran_def=gFortran
++    elif test x$F77 = xpgf77 ; then
++      cfortran_def=pgiFortran
++    else
++      cfortran_def=f2cFortran
++fi
++CFORTRAN_CFLAGS="-D$cfortran_def"
++AC_SUBST(CFORTRAN_CFLAGS)
+ 
+ # Checks for libraries.
+-AC_CHECK_LIB([g2c], [main],, AC_CHECK_LIB([f2c],[main],,))
+-AC_CHECK_LIB([blas], [main])
+-AC_CHECK_LIB([lapack], [main])
+-
+-# enable gfortran for mac intel
+-AC_ARG_ENABLE(gfortran,
+-[AC_HELP_STRING([--enable-gfortran],[Say yes for mac intel ])],
+-[ 
+-  AC_CHECK_LIB([gfortran],[main],,
+-	[AC_MSG_ERROR("Cannot find library gfortran.")])
+-  GFOR='-DgFortran'
+-  AC_SUBST(GFOR)
+-],
+-[ 
+-  GFOR=''
+-  AC_SUBST(GFOR)
++AX_BLAS(, [
++  AC_MSG_ERROR([blas was not found.
++*** Please get blas installed, or use the options
++*** --with-blas.])
+ ])
+ 
+-#cfitsio
+-AC_ARG_WITH([cfitsio-libdir], 
+-[AS_HELP_STRING([--with-cfitsio-libdir],[use ciftsio])],	       
+-[cfitsiolibarg="$withval"],
+-[])
+-AC_ARG_WITH([cfitsio-incdir], 
+-[AS_HELP_STRING([--with-cfitsio-incdir],[use ciftsio])],	       
+-[cfitsioincarg="$withval"],
+-[])
+-
+-
+-if test $cfitsiolibarg; then
+-     if test $cfitsioincarg; then
+-     
+-	## check lib
+-	AC_CHECK_LIB([cfitsio],[main],,
+-		AC_MSG_ERROR("cannot link with -L$cfitsiolibarg -lcfitsio"),
+-		[-L$cfitsiolibarg] )
+-	
+-	AC_CHECK_HEADERS([$cfitsioincarg/fitsio.h])
+-
+-	AC_SUBST(CFITSIOCPPFLAGS,["-DUSECFITSIO -I$cfitsioincarg"])
+-	AC_SUBST(CFITSIOLDFLAGS,["-R$cfitsiolibarg -L$cfitsiolibarg -lcfitsio"])
+-	
+-
+-     else
+-	AC_MSG_ERROR("need both --with-cfitsio-libdir and --with-cfitsio-incdir or none")
+-
+-     fi
+-
+-fi
+-
+-CXXFLAGS="-g -Wall -O3"
+-CPPFLAGS="-g -Wall -O3"
+-CFLAGS="-g -Wall -O3"
+-FFLAGS="-g -O3"
+-
++AX_LAPACK(, [
++  AC_MSG_ERROR([lapack was not found.
++*** Please get lapack installed, or use the options
++*** --with-lapack.])
++])
+ 
+-# Checks for header files.
+-AC_HEADER_DIRENT
+-AC_HEADER_STDC
++AX_CFITSIO(, [
++  AC_MSG_ERROR([cfitsio library could not be detected
++*** Please install cfitsio or use the options
++*** --with-cfitsio, or --with-cfitsio-includedir and --with-cfitsio-libdir.])
++])
+ 
+ AC_CONFIG_FILES([Makefile
+                  src/Makefile])
+diff -Nur snfit-2.1.9.orig/m4/ax_blas.m4 snfit-2.1.9/m4/ax_blas.m4
+--- snfit-2.1.9.orig/m4/ax_blas.m4	1970-01-01 01:00:00.000000000 +0100
++++ snfit-2.1.9/m4/ax_blas.m4	2010-03-16 17:05:50.000000000 +0000
+@@ -0,0 +1,197 @@
++# ===========================================================================
++#          http://www.gnu.org/software/autoconf-archive/ax_blas.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AX_BLAS([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
++#
++# DESCRIPTION
++#
++#   This macro looks for a library that implements the BLAS linear-algebra
++#   interface (see http://www.netlib.org/blas/). On success, it sets the
++#   BLAS_LIBS output variable to hold the requisite library linkages.
++#
++#   To link with BLAS, you should link with:
++#
++#     $BLAS_LIBS $LIBS $FLIBS
++#
++#   in that order. FLIBS is the output variable of the
++#   AC_F77_LIBRARY_LDFLAGS macro (called if necessary by AX_BLAS), and is
++#   sometimes necessary in order to link with F77 libraries. Users will also
++#   need to use AC_F77_DUMMY_MAIN (see the autoconf manual), for the same
++#   reason.
++#
++#   Many libraries are searched for, from ATLAS to CXML to ESSL. The user
++#   may also use --with-blas=<lib> in order to use some specific BLAS
++#   library <lib>. In order to link successfully, however, be aware that you
++#   will probably need to use the same Fortran compiler (which can be set
++#   via the F77 env. var.) as was used to compile the BLAS library.
++#
++#   ACTION-IF-FOUND is a list of shell commands to run if a BLAS library is
++#   found, and ACTION-IF-NOT-FOUND is a list of commands to run it if it is
++#   not found. If ACTION-IF-FOUND is not specified, the default action will
++#   define HAVE_BLAS.
++#
++# LICENSE
++#
++#   Copyright (c) 2008 Steven G. Johnson <stevenj@alum.mit.edu>
++#
++#   This program is free software: you can redistribute it and/or modify it
++#   under the terms of the GNU General Public License as published by the
++#   Free Software Foundation, either version 3 of the License, or (at your
++#   option) any later version.
++#
++#   This program is distributed in the hope that it will be useful, but
++#   WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++#   Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License along
++#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#
++#   As a special exception, the respective Autoconf Macro's copyright owner
++#   gives unlimited permission to copy, distribute and modify the configure
++#   scripts that are the output of Autoconf when processing the Macro. You
++#   need not follow the terms of the GNU General Public License when using
++#   or distributing such scripts, even though portions of the text of the
++#   Macro appear in them. The GNU General Public License (GPL) does govern
++#   all other use of the material that constitutes the Autoconf Macro.
++#
++#   This special exception to the GPL applies to versions of the Autoconf
++#   Macro released by the Autoconf Archive. When you make and distribute a
++#   modified version of the Autoconf Macro, you may extend this special
++#   exception to the GPL to apply to your modified version as well.
++
++#serial 8
++
++AU_ALIAS([ACX_BLAS], [AX_BLAS])
++AC_DEFUN([AX_BLAS], [
++AC_PREREQ(2.50)
++AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])
++ax_blas_ok=no
++
++AC_ARG_WITH(blas,
++	[AS_HELP_STRING([--with-blas=<lib>], [use BLAS library <lib>])])
++case $with_blas in
++	yes | "") ;;
++	no) ax_blas_ok=disable ;;
++	-* | */* | *.a | *.so | *.so.* | *.o) BLAS_LIBS="$with_blas" ;;
++	*) BLAS_LIBS="-l$with_blas" ;;
++esac
++
++# Get fortran linker names of BLAS functions to check for.
++AC_F77_FUNC(sgemm)
++AC_F77_FUNC(dgemm)
++
++ax_blas_save_LIBS="$LIBS"
++LIBS="$LIBS $FLIBS"
++
++# First, check BLAS_LIBS environment variable
++if test $ax_blas_ok = no; then
++if test "x$BLAS_LIBS" != x; then
++	save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
++	AC_MSG_CHECKING([for $sgemm in $BLAS_LIBS])
++	AC_TRY_LINK_FUNC($sgemm, [ax_blas_ok=yes], [BLAS_LIBS=""])
++	AC_MSG_RESULT($ax_blas_ok)
++	LIBS="$save_LIBS"
++fi
++fi
++
++# BLAS linked to by default?  (happens on some supercomputers)
++if test $ax_blas_ok = no; then
++	save_LIBS="$LIBS"; LIBS="$LIBS"
++	AC_CHECK_FUNC($sgemm, [ax_blas_ok=yes])
++	LIBS="$save_LIBS"
++fi
++
++# BLAS in ATLAS library? (http://math-atlas.sourceforge.net/)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(atlas, ATL_xerbla,
++		[AC_CHECK_LIB(f77blas, $sgemm,
++		[AC_CHECK_LIB(cblas, cblas_dgemm,
++			[ax_blas_ok=yes
++			 BLAS_LIBS="-lcblas -lf77blas -latlas"],
++			[], [-lf77blas -latlas])],
++			[], [-latlas])])
++fi
++
++# BLAS in PhiPACK libraries? (requires generic BLAS lib, too)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(blas, $sgemm,
++		[AC_CHECK_LIB(dgemm, $dgemm,
++		[AC_CHECK_LIB(sgemm, $sgemm,
++			[ax_blas_ok=yes; BLAS_LIBS="-lsgemm -ldgemm -lblas"],
++			[], [-lblas])],
++			[], [-lblas])])
++fi
++
++# BLAS in Intel MKL library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(mkl, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-lmkl"])
++fi
++
++# BLAS in Apple vecLib library?
++if test $ax_blas_ok = no; then
++	save_LIBS="$LIBS"; LIBS="-framework vecLib $LIBS"
++	AC_CHECK_FUNC($sgemm, [ax_blas_ok=yes;BLAS_LIBS="-framework vecLib"])
++	LIBS="$save_LIBS"
++fi
++
++# BLAS in Alpha CXML library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(cxml, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-lcxml"])
++fi
++
++# BLAS in Alpha DXML library? (now called CXML, see above)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(dxml, $sgemm, [ax_blas_ok=yes;BLAS_LIBS="-ldxml"])
++fi
++
++# BLAS in Sun Performance library?
++if test $ax_blas_ok = no; then
++	if test "x$GCC" != xyes; then # only works with Sun CC
++		AC_CHECK_LIB(sunmath, acosp,
++			[AC_CHECK_LIB(sunperf, $sgemm,
++        			[BLAS_LIBS="-xlic_lib=sunperf -lsunmath"
++                                 ax_blas_ok=yes],[],[-lsunmath])])
++	fi
++fi
++
++# BLAS in SCSL library?  (SGI/Cray Scientific Library)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(scs, $sgemm, [ax_blas_ok=yes; BLAS_LIBS="-lscs"])
++fi
++
++# BLAS in SGIMATH library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(complib.sgimath, $sgemm,
++		     [ax_blas_ok=yes; BLAS_LIBS="-lcomplib.sgimath"])
++fi
++
++# BLAS in IBM ESSL library? (requires generic BLAS lib, too)
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(blas, $sgemm,
++		[AC_CHECK_LIB(essl, $sgemm,
++			[ax_blas_ok=yes; BLAS_LIBS="-lessl -lblas"],
++			[], [-lblas $FLIBS])])
++fi
++
++# Generic BLAS library?
++if test $ax_blas_ok = no; then
++	AC_CHECK_LIB(blas, $sgemm, [ax_blas_ok=yes; BLAS_LIBS="-lblas"])
++fi
++
++AC_SUBST(BLAS_LIBS)
++
++LIBS="$ax_blas_save_LIBS"
++
++# Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
++if test x"$ax_blas_ok" = xyes; then
++        ifelse([$1],,AC_DEFINE(HAVE_BLAS,1,[Define if you have a BLAS library.]),[$1])
++        :
++else
++        ax_blas_ok=no
++        $2
++fi
++])dnl AX_BLAS
+diff -Nur snfit-2.1.9.orig/m4/ax_cfitsio.m4 snfit-2.1.9/m4/ax_cfitsio.m4
+--- snfit-2.1.9.orig/m4/ax_cfitsio.m4	1970-01-01 01:00:00.000000000 +0100
++++ snfit-2.1.9/m4/ax_cfitsio.m4	2010-03-16 17:05:50.000000000 +0000
+@@ -0,0 +1,58 @@
++# -*- autoconf -*-
++# 
++# use as AX_CFITSIO([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
++#
++
++AC_DEFUN([AX_CFITSIO],[
++
++ax_cfitsio_ok=no
++
++PKG_CHECK_MODULES([CFITSIO], [cfitsio $1], ax_cfitsio_ok=yes,[
++    if test x$CFITSIO_LIBS = x ; then
++       CFITSIO_LIBS="-lcfitsio -lm"
++    fi
++
++    AC_ARG_WITH(cfitsio,
++	[  --with-cfitsio=DIR        directory where cfitsio source was compiled],
++    	[CFITSIO_CFLAGS="-I$withval"
++	 CFITSIO_LIBS="-L$withval $CFITSIO_LIBS"],
++    )
++
++    AC_ARG_WITH(cfitsio-includedir,
++	[  --with-cfitsio-includedir=DIR directory where the headers were installed],
++	[CFITSIO_CFLAGS=-I$withval],
++    )
++
++    AC_ARG_WITH(cfitsio-libdir,
++	[  --with-cfitsio-libdir=DIR directory where the library was installed],
++	[CFITSIO_LIBS=-L$withval $CFITSIO_LIBS],
++    )
++
++    CPPFLAGS_sav="$CPPFLAGS"
++    CPPFLAGS="$CPPFLAGS $CFITSIO_CFLAGS"
++
++    AC_CHECK_HEADER(fitsio.h, ,
++	[AC_MSG_WARN([  *** Header file fitsio.h not found.])])
++
++    LIBS_sav="$LIBS"
++    LIBS="$LIBS $CFITSIO_LIBS"
++
++    AC_CHECK_LIB(cfitsio, ffopen, ax_cfitsio_ok=yes,
++    	[AC_MSG_WARN([ *** Library libcfitsio not linked properly])])
++
++   AC_SUBST(CFITSIO_CFLAGS)
++   AC_SUBST(CFITSIO_LIBS)
++
++   LIBS="$LIBS_sav"
++   CFLAGS="$CFLAGS_sav"
++])
++
++# Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
++if test x"$ax_cfitsio_ok" = xyes; then
++        ifelse([$1],,AC_DEFINE(HAVE_CFITSIO,1,[Define if you have CFITSIO library.]),[$1])
++        :
++else
++        ax_cfitsio_ok=no
++        $2
++fi
++])
+diff -Nur snfit-2.1.9.orig/m4/ax_lapack.m4 snfit-2.1.9/m4/ax_lapack.m4
+--- snfit-2.1.9.orig/m4/ax_lapack.m4	1970-01-01 01:00:00.000000000 +0100
++++ snfit-2.1.9/m4/ax_lapack.m4	2010-03-16 17:05:50.000000000 +0000
+@@ -0,0 +1,131 @@
++# ===========================================================================
++#         http://www.gnu.org/software/autoconf-archive/ax_lapack.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AX_LAPACK([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
++#
++# DESCRIPTION
++#
++#   This macro looks for a library that implements the LAPACK linear-algebra
++#   interface (see http://www.netlib.org/lapack/). On success, it sets the
++#   LAPACK_LIBS output variable to hold the requisite library linkages.
++#
++#   To link with LAPACK, you should link with:
++#
++#     $LAPACK_LIBS $BLAS_LIBS $LIBS $FLIBS
++#
++#   in that order. BLAS_LIBS is the output variable of the AX_BLAS macro,
++#   called automatically. FLIBS is the output variable of the
++#   AC_F77_LIBRARY_LDFLAGS macro (called if necessary by AX_BLAS), and is
++#   sometimes necessary in order to link with F77 libraries. Users will also
++#   need to use AC_F77_DUMMY_MAIN (see the autoconf manual), for the same
++#   reason.
++#
++#   The user may also use --with-lapack=<lib> in order to use some specific
++#   LAPACK library <lib>. In order to link successfully, however, be aware
++#   that you will probably need to use the same Fortran compiler (which can
++#   be set via the F77 env. var.) as was used to compile the LAPACK and BLAS
++#   libraries.
++#
++#   ACTION-IF-FOUND is a list of shell commands to run if a LAPACK library
++#   is found, and ACTION-IF-NOT-FOUND is a list of commands to run it if it
++#   is not found. If ACTION-IF-FOUND is not specified, the default action
++#   will define HAVE_LAPACK.
++#
++# LICENSE
++#
++#   Copyright (c) 2009 Steven G. Johnson <stevenj@alum.mit.edu>
++#
++#   This program is free software: you can redistribute it and/or modify it
++#   under the terms of the GNU General Public License as published by the
++#   Free Software Foundation, either version 3 of the License, or (at your
++#   option) any later version.
++#
++#   This program is distributed in the hope that it will be useful, but
++#   WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++#   Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License along
++#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#
++#   As a special exception, the respective Autoconf Macro's copyright owner
++#   gives unlimited permission to copy, distribute and modify the configure
++#   scripts that are the output of Autoconf when processing the Macro. You
++#   need not follow the terms of the GNU General Public License when using
++#   or distributing such scripts, even though portions of the text of the
++#   Macro appear in them. The GNU General Public License (GPL) does govern
++#   all other use of the material that constitutes the Autoconf Macro.
++#
++#   This special exception to the GPL applies to versions of the Autoconf
++#   Macro released by the Autoconf Archive. When you make and distribute a
++#   modified version of the Autoconf Macro, you may extend this special
++#   exception to the GPL to apply to your modified version as well.
++
++#serial 7
++
++AU_ALIAS([ACX_LAPACK], [AX_LAPACK])
++AC_DEFUN([AX_LAPACK], [
++AC_REQUIRE([AX_BLAS])
++ax_lapack_ok=no
++
++AC_ARG_WITH(lapack,
++        [AS_HELP_STRING([--with-lapack=<lib>], [use LAPACK library <lib>])])
++case $with_lapack in
++        yes | "") ;;
++        no) ax_lapack_ok=disable ;;
++        -* | */* | *.a | *.so | *.so.* | *.o) LAPACK_LIBS="$with_lapack" ;;
++        *) LAPACK_LIBS="-l$with_lapack" ;;
++esac
++
++# Get fortran linker name of LAPACK function to check for.
++AC_F77_FUNC(cheev)
++
++# We cannot use LAPACK if BLAS is not found
++if test "x$ax_blas_ok" != xyes; then
++        ax_lapack_ok=noblas
++        LAPACK_LIBS=""
++fi
++
++# First, check LAPACK_LIBS environment variable
++if test "x$LAPACK_LIBS" != x; then
++        save_LIBS="$LIBS"; LIBS="$LAPACK_LIBS $BLAS_LIBS $LIBS $FLIBS"
++        AC_MSG_CHECKING([for $cheev in $LAPACK_LIBS])
++        AC_TRY_LINK_FUNC($cheev, [ax_lapack_ok=yes], [LAPACK_LIBS=""])
++        AC_MSG_RESULT($ax_lapack_ok)
++        LIBS="$save_LIBS"
++        if test $ax_lapack_ok = no; then
++                LAPACK_LIBS=""
++        fi
++fi
++
++# LAPACK linked to by default?  (is sometimes included in BLAS lib)
++if test $ax_lapack_ok = no; then
++        save_LIBS="$LIBS"; LIBS="$LIBS $BLAS_LIBS $FLIBS"
++        AC_CHECK_FUNC($cheev, [ax_lapack_ok=yes])
++        LIBS="$save_LIBS"
++fi
++
++# Generic LAPACK library?
++for lapack in lapack lapack_rs6k; do
++        if test $ax_lapack_ok = no; then
++                save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
++                AC_CHECK_LIB($lapack, $cheev,
++                    [ax_lapack_ok=yes; LAPACK_LIBS="-l$lapack"], [], [$FLIBS])
++                LIBS="$save_LIBS"
++        fi
++done
++
++AC_SUBST(LAPACK_LIBS)
++
++# Finally, execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
++if test x"$ax_lapack_ok" = xyes; then
++        ifelse([$1],,AC_DEFINE(HAVE_LAPACK,1,[Define if you have LAPACK library.]),[$1])
++        :
++else
++        ax_lapack_ok=no
++        $2
++fi
++])dnl AX_LAPACK
+diff -Nur snfit-2.1.9.orig/Makefile.am snfit-2.1.9/Makefile.am
+--- snfit-2.1.9.orig/Makefile.am	2010-03-16 15:38:24.000000000 +0000
++++ snfit-2.1.9/Makefile.am	2010-03-16 17:08:52.000000000 +0000
+@@ -1,4 +1,4 @@
++ACLOCAL = aclocal -I m4
+ 
+ EXTRA_DIST = mgr/install_cmt mgr/requirements
+-
+ SUBDIRS = src 
+diff -Nur snfit-2.1.9.orig/src/Makefile.am snfit-2.1.9/src/Makefile.am
+--- snfit-2.1.9.orig/src/Makefile.am	2010-03-16 15:38:24.000000000 +0000
++++ snfit-2.1.9/src/Makefile.am	2010-03-16 17:11:19.000000000 +0000
+@@ -1,10 +1,7 @@
+-
+-AM_CXXFLAGS = -DUSELAPACK @GFOR@ @CFITSIOCPPFLAGS@ 
+-
+-AM_LDFLAGS  = -L$(top_builddir)/src -R @libdir@ -L@libdir@ @CFITSIOLDFLAGS@
+-
+ lib_LTLIBRARIES = libsnfit.la
+ 
++libsnfit_la_LIBADD = @CFITSIO_LIBS@ @BLAS_LIBS@ @LAPACK_LIBS@
++libsnfit_la_CPPFLAGS =  -DUSELAPACK @CFITSIO_CFLAGS@ @CFORTRAN_CFLAGS@
+ libsnfit_la_SOURCES = \
+ dfact.F         minuit.F  mncrck.F  mneval.F  mnhess.F  mnmatu.F  mnplot.F  mnsave.F  mntiny.F \
+ dfeqn.F         mnamin.F  mncros.F  mnexcm.F  mnimpr.F  mnmigr.F  mnpout.F  mnscan.F  mnunpt.F \
+@@ -46,7 +43,7 @@
+ bspline1d-saved.h  dictfile.h        hubblefluxmodel.h         legendre.h        poly1.h             templatecurves.h \
+ bspline1d.h        fatalerror.h      hubblefluxmodel2.h        legsplit.h        salt2extinction.h   vutils.h \
+ bspline2d.h        fileutils.h       hubblemagmodel.h          magsys.h          salt2model.h        wavelength.h \
+-cfortran.h         filter.h          hubblemagmodel2.h         malmquist_bias.h  saltmodel.h         wmap5cosmo.h \
++ filter.h          hubblemagmodel2.h         malmquist_bias.h  saltmodel.h         wmap5cosmo.h \
+ corrector.h        filterwheel.h     hubblemagmodel_filters.h  matvect.h         sampledfunction.h   wmap5cosmoprior.h \
+ cosmology.h        fittedsn.h        hubblemodel.h             measureddata.h    snfitexception.h \
+ cosmology_prior.h  fullfit.h         instrument.h              minuit.h          sparsevect.h \
+@@ -55,18 +52,11 @@
+ datacards.h        hostabsorption.h  lcmodels.h                pathutils.h       spectrumtemplate.h \
+ bspline.c
+ 
+-
++LDADD = libsnfit.la
+ bin_PROGRAMS = snfit snlc snphotoz snmag snstat hubblefit
+-
+ snfit_SOURCES     = snfit.cc
+-snfit_LDFLAGS     = -L$(top_builddir)/src -lsnfit
+ snlc_SOURCES      = snlc.cc
+-snlc_LDFLAGS      = -L$(top_builddir)/src -lsnfit
+ snphotoz_SOURCES  = snphotoz.cc
+-snphotoz_LDFLAGS  = -L$(top_builddir)/src -lsnfit
+ snmag_SOURCES     = snmag.cc
+-snmag_LDFLAGS     = -L$(top_builddir)/src -lsnfit
+ snstat_SOURCES    = snstat.cc
+-snstat_LDFLAGS    = -L$(top_builddir)/src -lsnfit
+ hubblefit_SOURCES = hubblefit.cc
+-hubblefit_LDFLAGS = -L$(top_builddir)/src -lsnfit

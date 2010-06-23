@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer>
+  <email>sfabbro@uvic.ca</email>
+</maintainer>
+<longdescription lang="en">
+  Poloka (formerly TOADS) is a library to analyze FITS images. It is written mostly in C++. Features include:
+  * image cataloguing (through SExtractor and its own tools)
+  * image registration and resampling
+  * image stacking
+  * image subtraction
+  * PSF and aperture photometry
+  * transient objects light curve reconstruction with complex background
+</longdescription>
+</pkgmetadata>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer>
+  <email>sfabbro@uvic.ca</email>
+</maintainer>
+<longdescription lang="en">
+  SALT (Spectral Adaptive Lightcurve Template) is a package for Type Ia Supernovae light curve fitting. Its main pupose is to provide a distance estimator but the latest release can also be used to estimate Supernova photometric redshifts.
+</longdescription>
+</pkgmetadata>

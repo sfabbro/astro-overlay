@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer>
+  <email>sfabbro@uvic.ca</email>
+</maintainer>
+<longdescription lang="en">
+  ALLFRAME is a suite of crowded stellar photometry software: DAOPHOT
+  and its subsequent ALLSTAR, DAOGROW, DAOMATCH, DAOMASTER and ALLFRAME.
+  Before using these programs, or if you are not familiar with these
+  programs, you are strongly advised to read the following papers:
+
+  * DAOPHOT - A computer program for crowded-field stellar photometry
+  http://adsabs.harvard.edu/abs/1987PASP...99..191S
+
+  * On the growth-curve method for calibrating stellar photometry with CCDs
+  http://adsabs.harvard.edu/abs/1990PASP..102..932S
+
+  * The center of the core-cusp globular cluster M15: CFHT and HST
+  Observations, ALLFRAME reductions
+  http://adsabs.harvard.edu/abs/1994PASP..106..250S
+</longdescription>
+</pkgmetadata>
