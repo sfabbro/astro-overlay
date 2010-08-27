@@ -1,0 +1,10 @@
+# ChangeLog for sci-astronomy/poloka
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*poloka-0.3.0 (27 Aug 2010)
+
+  27 Aug 2010; Sébastien Fabbro <bicatali@gentoo.org> -poloka-0.2.1.ebuild,
+  +poloka-0.3.0.ebuild, metadata.xml:
+  Initial import
+

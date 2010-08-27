@@ -5,16 +5,20 @@
 EAPI=2
 inherit eutils
 
-DESCRIPTION="Library for astronomical image analysis focusing on photometry"
+DESCRIPTION="Astronomical data processing library geared towards optical supernova surveys"
 HOMEPAGE="http://gitorious.org/poloka"
 SRC_URI="${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc minimal"
-RDEPEND="virtual/lapack
-	sci-libs/cfitsio"
+IUSE="cernlib imagemagick snfit"
+RDEPEND="sci-astronomy/libsex
+	sci-libs/cfitsio
+	virtual/lapack
+	cernlib? ( sci-physics/cernlib )
+	imagemagick? ( media-gfx/imagemagick )
+	snfit? ( sci-astronomy/snfit )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
@@ -22,14 +26,15 @@ src_configure() {
 	econf \
 		--with-blas="$(pkg-config --libs blas)" \
 		--with-lapack="$(pkg-config --libs lapack)" \
-		$(use_enable !minimal sex) \
-		$(use_enable !minimal psf) \
-		$(use_enable !minimal sub) \
-		$(use_enable !minimal simfit) \
-		$(use_enable !minimal simphot)
+		$(use_enable cernlib) \
+		$(use_enable imagemagick) \
+		$(use_enable snfit mc)
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS README
+	echo DBCONFIG=/usr/share/poloka > 99poloka
+	echo TOADSCARDS=/usr/share/poloka/datacards >> 99poloka
+	doenvd 99poloka
 }
