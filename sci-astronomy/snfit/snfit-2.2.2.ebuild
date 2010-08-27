@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=2
-inherit eutils autotools
+inherit eutils
 
 DESCRIPTION="Spectral Adaptive Lightcurve Template"
 HOMEPAGE="http://supernovae.in2p3.fr/~guy/salt/"
@@ -20,15 +20,6 @@ DEPEND="${RDEPEND}
 	dev-lang/cfortran
 	dev-util/pkgconfig"
 
-S="${WORKDIR}/${MYP}"
-
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-gcc44.patch
-	epatch "${FILESDIR}"/${P}-autotools.patch
-	AT_M4DIR="m4" eautoreconf
-	rm -f src/cfortran.h
-}
-
 src_configure() {
 	econf \
 		--with-blas="$(pkg-config --libs blas)" \
@@ -40,5 +31,4 @@ src_install() {
 	dodoc AUTHORS README
 	echo "PATHMODEL=/usr/share/snfit" > 99snfit
 	doenvd 99snfit || die
-	rm -f "${D}"usr/include/minuit.h
 }

@@ -2,6 +2,13 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*snfit-2.2.2 (27 Aug 2010)
+
+  27 Aug 2010; Sébastien Fabbro <bicatali@gentoo.org> -snfit-2.1.9.ebuild,
+  -files/snfit-2.1.9-autotools.patch, -files/snfit-2.1.9-gcc44.patch,
+  +snfit-2.2.2.ebuild:
+  Version bump, some autotools fixes
+
 *snfit-2.1.9 (27 Aug 2010)
 
   27 Aug 2010; Sébastien Fabbro <bicatali@gentoo.org> +snfit-2.1.9.ebuild,
