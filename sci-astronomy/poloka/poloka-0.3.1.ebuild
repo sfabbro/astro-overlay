@@ -26,6 +26,7 @@ src_configure() {
 	econf \
 		--with-blas="$(pkg-config --libs blas)" \
 		--with-lapack="$(pkg-config --libs lapack)" \
+		--without-static-cernlib \
 		$(use_enable cernlib) \
 		$(use_enable imagemagick) \
 		$(use_enable snfit mc)
