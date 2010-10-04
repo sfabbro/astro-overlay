@@ -7,7 +7,7 @@ inherit eutils
 
 DESCRIPTION="Astronomical data processing library geared towards optical supernova surveys"
 HOMEPAGE="http://gitorious.org/poloka"
-SRC_URI="${P}.tar.gz"
+SRC_URI="http://astrowww.phys.uvic.ca/~seb/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -35,7 +35,7 @@ src_configure() {
 src_install() {
 	emake DESTDIR="${D}" install || die "emake install failed"
 	dodoc AUTHORS README
-	echo DBCONFIG=/usr/share/poloka > 99poloka
+	echo DBCONFIG=/usr/share/poloka/dbconfig > 99poloka
 	echo TOADSCARDS=/usr/share/poloka/datacards >> 99poloka
 	doenvd 99poloka
 }
