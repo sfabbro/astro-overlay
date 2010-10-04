@@ -8,7 +8,7 @@ inherit flag-o-matic
 
 DESCRIPTION="Extract catalogs of sources from astronomical FITS images."
 HOMEPAGE="http://gitorious.org/poloka/libsex"
-SRC_URI="${P}.tar.gz"
+SRC_URI="http://astrowww.phys.uvic.ca/~seb/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
