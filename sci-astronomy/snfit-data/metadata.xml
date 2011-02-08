@@ -5,6 +5,7 @@
   <email>sfabbro@uvic.ca</email>
 </maintainer>
 <longdescription lang="en">
-  This is a package that includes transmission curves and spectra sequence models for snfit.
+  This is a package that includes transmission curves and spectra
+  sequence models for snfit.
 </longdescription>
 </pkgmetadata>
