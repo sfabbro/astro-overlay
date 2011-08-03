@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=4
 inherit eutils
 
 DESCRIPTION="Astronomical data processing library geared towards optical supernova surveys"
@@ -33,8 +33,7 @@ src_configure() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
-	dodoc AUTHORS README
+	default
 	echo DBCONFIG=/usr/share/poloka/dbconfig > 99poloka
 	echo TOADSCARDS=/usr/share/poloka/datacards >> 99poloka
 	doenvd 99poloka
