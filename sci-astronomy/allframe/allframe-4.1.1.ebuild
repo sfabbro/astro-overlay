@@ -2,9 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
-
-inherit eutils
+EAPI=4
 
 DESCRIPTION="Stellar photometry software"
 HOMEPAGE=""
@@ -22,15 +20,7 @@ RDEPEND="${DEPEND}"
 
 RESTRICT=fetch
 
-src_prepare() {
-	epatch "${FILESDIR}"/${P}-comments.patch
-}
-
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
-	dodoc README NEWS AUTHORS ChangeLog
-	if use doc; then
-		insinto /usr/share/doc/${PF}
-		doins doc/* || die
-	fi
+	default
+	use doc && dodoc doc/*
 }
