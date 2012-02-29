@@ -1,19 +1,19 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=4
 inherit eutils
 
-DESCRIPTION="Astronomical data processing library geared towards optical supernova surveys"
-HOMEPAGE="http://gitorious.org/poloka"
-SRC_URI="http://astrowww.phys.uvic.ca/~seb/${P}.tar.gz"
+DESCRIPTION="Astronomy processing library geared towards supernova surveys"
+HOMEPAGE="http://github.com/sfabbro/poloka"
+SRC_URI="http://astrowww.phys.uvic.ca/~seb/poloka/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="cernlib imagemagick snfit"
-RDEPEND="sci-astronomy/libsex
+RDEPEND="sci-astronomy/libsextractor
 	sci-libs/cfitsio
 	virtual/lapack
 	cernlib? ( sci-physics/cernlib )

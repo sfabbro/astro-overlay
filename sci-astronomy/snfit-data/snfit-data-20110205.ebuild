@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=3
+EAPI=4
 
 DESCRIPTION="Spectral Adaptive Lightcurve Template instruments and models"
 HOMEPAGE="http://supernovae.in2p3.fr/~guy/salt/"
@@ -20,7 +20,7 @@ SNFIT_DATA="salt2_model_data-2-0
 	SNLS3-Vega-magsys"
 
 for d in ${SNFIT_DATA}; do
-	SRC_URI="${SRC_URI} ${HOMEPAGE}download/${d}.tar.gz"
+	SRC_URI="${SRC_URI} ${HOMEPAGE}/download/${d}.tar.gz"
 done
 
 LICENSE="GPL-2"
@@ -36,7 +36,7 @@ RESTRICT="mirror"
 S="${WORKDIR}"
 
 src_prepare() {
-	cat <<-EOF >> fitmodel.card
+	cat <<-EOF > fitmodel.card
 		@SALT2 salt2-2-0
 		@STANDARD Instruments/SNLS3-Landolt-model
 		@MEGACAM Instruments/SNLS3-Megacam-model
@@ -56,5 +56,5 @@ src_prepare() {
 
 src_install() {
 	insinto /usr/share/snfit
-	doins -r * || die
+	doins -r *
 }
