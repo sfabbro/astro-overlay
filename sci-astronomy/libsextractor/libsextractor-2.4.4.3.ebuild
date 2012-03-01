@@ -12,7 +12,7 @@ SRC_URI="http://astrowww.phys.uvic.ca/~seb/poloka/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc"
+IUSE="doc static-libs"
 
 RDEPEND=""
 DEPEND="${RDEPEND}"
@@ -21,9 +21,13 @@ pkg_setup() {
 	replace-flags -O[2-9] -O1
 }
 
+src_configure() {
+	econf $(use_enable static-libs static)
+}
+
 src_install () {
 	default
-	CONFDIR=/usr/share/libsex
+	CONFDIR=/usr/share/${PN}
 	insinto ${CONFDIR}
 	doins config/*
 	if use doc; then

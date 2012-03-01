@@ -16,6 +16,7 @@ IUSE=""
 
 DEPEND="sci-libs/cfitsio
 	sci-astronomy/allframe
+	sys-devel/bc
 	|| (
 		sys-apps/coreutils
 		sys-freebsd/freebsd-bin

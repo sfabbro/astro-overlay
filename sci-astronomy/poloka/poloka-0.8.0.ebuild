@@ -12,7 +12,7 @@ SRC_URI="http://astrowww.phys.uvic.ca/~seb/poloka/${P}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="cernlib imagemagick snfit"
+IUSE="cernlib imagemagick snfit static-libs"
 RDEPEND="sci-astronomy/libsextractor
 	sci-libs/cfitsio
 	virtual/lapack
@@ -29,7 +29,8 @@ src_configure() {
 		--without-static-cernlib \
 		$(use_enable cernlib) \
 		$(use_enable imagemagick) \
-		$(use_enable snfit mc)
+		$(use_enable snfit mc) \
+		$(use_enable static-libs static)
 }
 
 src_install() {
