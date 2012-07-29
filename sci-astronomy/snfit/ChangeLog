@@ -2,6 +2,9 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  29 Jul 2012; Sébastien Fabbro <bicatali@gentoo.org> snfit-2.3.7.ebuild:
+  sci-astronomy/snfit: keyworded for prefix
+
 *snfit-2.3.7 (29 Feb 2012)
 
   29 Feb 2012; Sébastien Fabbro <bicatali@gentoo.org> -snfit-2.2.2b.ebuild,
@@ -31,4 +34,3 @@
   +files/snfit-2.1.9-autotools.patch, +files/snfit-2.1.9-gcc44.patch,
   +metadata.xml:
   Initial import
-

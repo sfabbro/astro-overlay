@@ -11,7 +11,7 @@ SRC_URI="http://supernovae.in2p3.fr/~guy/salt/download/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE=""
 RDEPEND="virtual/lapack
 	sci-libs/cfitsio
@@ -33,6 +33,6 @@ src_configure() {
 
 src_install() {
 	default
-	echo "PATHMODEL=/usr/share/snfit" > 99snfit
+	echo "PATHMODEL=${EPREFIX}/usr/share/snfit" > 99snfit
 	doenvd 99snfit
 }
