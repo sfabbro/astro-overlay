@@ -1,6 +1,10 @@
 # ChangeLog for sci-astronomy/snfit-data
-# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  29 Jul 2012; Sébastien Fabbro <bicatali@gentoo.org>
+  snfit-data-20110205.ebuild:
+  sci-astronomy/snfit-data: keyworded for prefix
 
 *snfit-data-20110205 (08 Feb 2011)
 
@@ -13,4 +17,3 @@
   27 Aug 2010; Sébastien Fabbro <bicatali@gentoo.org>
   +snfit-data-20100825.ebuild, +metadata.xml:
   Initial import
-
