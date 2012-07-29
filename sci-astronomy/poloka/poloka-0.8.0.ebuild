@@ -11,7 +11,7 @@ SRC_URI="http://astrowww.phys.uvic.ca/~seb/poloka/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="cernlib imagemagick snfit static-libs"
 RDEPEND="sci-astronomy/libsextractor
 	sci-libs/cfitsio
@@ -35,7 +35,7 @@ src_configure() {
 
 src_install() {
 	default
-	echo DBCONFIG=/usr/share/poloka/dbconfig > 99poloka
-	echo TOADSCARDS=/usr/share/poloka/datacards >> 99poloka
+	echo "DBCONFIG=${EROOT}/usr/share/poloka/dbconfig" > 99poloka
+	echo "TOADSCARDS=${EROOT}/usr/share/poloka/datacards" >> 99poloka
 	doenvd 99poloka
 }

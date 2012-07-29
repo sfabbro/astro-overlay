@@ -2,6 +2,9 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  29 Jul 2012; Sébastien Fabbro <bicatali@gentoo.org> poloka-0.8.0.ebuild:
+  sci-astronomy/poloka: keyworded for prefix
+
 *poloka-0.8.0 (29 Feb 2012)
 
   29 Feb 2012; Sébastien Fabbro <bicatali@gentoo.org> -poloka-0.6.3.ebuild,
@@ -31,4 +34,3 @@
   27 Aug 2010; Sébastien Fabbro <bicatali@gentoo.org> -poloka-0.2.1.ebuild,
   +poloka-0.3.0.ebuild, metadata.xml:
   Initial import
-
