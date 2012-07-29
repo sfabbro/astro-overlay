@@ -8,10 +8,10 @@ DESCRIPTION="Stellar photometry software"
 HOMEPAGE=""
 SRC_URI="${P}.tar.gz"
 
-LICENSE="GPL-2"
+LICENSE="daophot-agreement"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 
 IUSE="doc"
 
