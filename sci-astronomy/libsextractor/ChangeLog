@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  29 Jul 2012; Sébastien Fabbro <bicatali@gentoo.org>
+  libsextractor-2.4.4.3.ebuild, metadata.xml:
+  sci-astronomy/libsextractor: keyworded for prefix
+
 *libsextractor-2.4.4.3 (29 Feb 2012)
 
   29 Feb 2012; Sébastien Fabbro <bicatali@gentoo.org>
@@ -29,4 +33,3 @@
   27 Aug 2010; Sébastien Fabbro <bicatali@gentoo.org>
   +libsex-2.4.4.1.ebuild, +metadata.xml:
   Initial import
-

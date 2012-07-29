@@ -11,7 +11,7 @@ SRC_URI="http://astrowww.phys.uvic.ca/~seb/poloka/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="doc static-libs"
 
 RDEPEND=""
@@ -30,13 +30,10 @@ src_install () {
 	CONFDIR=/usr/share/${PN}
 	insinto ${CONFDIR}
 	doins config/*
-	if use doc; then
-		insinto /usr/share/doc/${PF}
-		doins doc/*
-	fi
+	use doc && dodoc doc/*
 }
 
 pkg_postinst() {
-	elog "libsex examples configuration files are located"
-	elog "in ${EROOT}${CONFDIR} and are not loaded anymore by default."
+	elog "${PN} configuration files are located in:"
+	elog "${EROOT}${CONFDIR} and are not loaded anymore by default."
 }

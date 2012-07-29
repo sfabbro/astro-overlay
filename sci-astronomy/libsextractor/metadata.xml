@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<herd>sci</herd>
+<maintainer>
+  <email>sfabbro@uvic.ca</email>
+</maintainer>
 <longdescription lang="en">
   SExtractor (Source Extractor) is a program that builds a catalogue of
   objects from an astronomical image. Although it is particularly
