@@ -2,6 +2,12 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*allphot-0.8.1 (29 Jul 2012)
+
+  29 Jul 2012; Sébastien Fabbro <bicatali@gentoo.org> +allphot-0.8.1.ebuild,
+  -allphot-0.8.0.ebuild, metadata.xml:
+  sci-astronomy/allphot: Version bump, keyword amd64-linux, x86-linux
+
 *allphot-0.8.0 (29 Feb 2012)
 
   29 Feb 2012; Sébastien Fabbro <bicatali@gentoo.org> -allphot-0.7.0.ebuild,
@@ -13,4 +19,3 @@
   03 Aug 2011; Sébastien Fabbro <bicatali@gentoo.org> -allphot-0.2.3.ebuild,
   +allphot-0.7.0.ebuild:
   Version bump. Public version
-

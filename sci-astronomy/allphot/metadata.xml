@@ -5,6 +5,9 @@
   <email>sfabbro@uvic.ca</email>
 </maintainer>
 <longdescription lang="en">
-  ALLPHOT is a collection of wrapper scripts to automate the multi-frame photometry programs contained in ALLFRAME. It provieds an API to write simple ALLFRAME recipes one can apply to a bunch of CCD frame to measure star magnitudes.
+  ALLPHOT is a collection of wrapper scripts to automate the
+  multi-frame photometry programs contained in ALLFRAME. It provieds
+  an API to write simple ALLFRAME recipes one can apply to a bunch of
+  CCD frame to measure star magnitudes.
 </longdescription>
 </pkgmetadata>
