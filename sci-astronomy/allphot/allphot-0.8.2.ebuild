@@ -3,7 +3,7 @@
 
 EAPI=4
 
-DESCRIPTION="Bash library and tools to wrap and automate ALLFRAME"
+DESCRIPTION="Tools to automate ALLFRAME"
 HOMEPAGE="http://github.com/sfabbro/allphot"
 SRC_URI="http://astrowww.phys.uvic.ca/~seb/allphot/${P}.tar.gz"
 
@@ -15,7 +15,7 @@ KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE=""
 
 DEPEND="sci-libs/cfitsio
-	sci-astronomy/allframe
+	>=sci-astronomy/allframe-4.1.2
 	sys-devel/bc
 	|| (
 		sys-apps/coreutils
