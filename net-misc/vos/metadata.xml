@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<herd>sci-astronomy</herd>
+<longdescription lang="en">
+  cadcVOFS is a set of python modules and scripts for access VOSpace.
+  The default installation of cadcVOFS is tuned for accessing the
+  VOSpace provided by the Canadian Astronomy Data Centre
+  http://www.cadc.hia.nrc.gc.ca/vospace.
+  VOSpace is a Distrbuted Cloud storage service for use in Astronomy.
+</longdescription>
+</pkgmetadata>

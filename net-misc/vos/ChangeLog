@@ -1,0 +1,5 @@
+*vos-1.6.6_p1 (29 Oct 2012)
+
+  29 Oct 2012; Sébastien Fabbro <bicatali@gentoo.org> +metadata.xml,
+  +vos-1.6.6_p1.ebuild:
+  net-misc/vos: Version bump
