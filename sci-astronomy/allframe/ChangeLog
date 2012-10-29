@@ -1,0 +1,5 @@
+*allframe-4.1.2 (29 Oct 2012)
+
+  29 Oct 2012; Sébastien Fabbro <bicatali@gentoo.org> +allframe-4.1.2.ebuild,
+  -allframe-4.1.1.ebuild:
+  sci-astronomy/allframe: Version bump
