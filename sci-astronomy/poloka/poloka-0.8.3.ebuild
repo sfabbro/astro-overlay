@@ -20,7 +20,7 @@ RDEPEND="sci-astronomy/libsextractor
 	imagemagick? ( media-gfx/imagemagick )
 	snfit? ( sci-astronomy/snfit )"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	virtual/pkgconfig"
 
 src_configure() {
 	econf \
