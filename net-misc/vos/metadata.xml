@@ -9,4 +9,7 @@
   http://www.cadc.hia.nrc.gc.ca/vospace.
   VOSpace is a Distrbuted Cloud storage service for use in Astronomy.
 </longdescription>
+<upstream>
+  <remote-id type="pypi">vos</remote-id>
+</upstream>
 </pkgmetadata>
