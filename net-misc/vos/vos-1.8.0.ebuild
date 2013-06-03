@@ -19,4 +19,4 @@ IUSE=""
 
 RDEPEND="sys-fs/fuse"
 DEPEND="${RDEPEND}
-	dev-python/setuptools"
+	dev-python/setuptools[${PYTHON_USEDEP}]"
