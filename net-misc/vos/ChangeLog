@@ -1,3 +1,9 @@
+*vos-1.9.7 (08 Aug 2013)
+
+  08 Aug 2013; Sébastien Fabbro <bicatali@gentoo.org> +vos-1.9.7.ebuild,
+  -vos-1.8.1.ebuild:
+  net-misc/vos: Version bump
+
 *vos-1.8.1 (21 Jun 2013)
 
   21 Jun 2013; Sébastien Fabbro <bicatali@gentoo.org> +vos-1.8.1.ebuild,
