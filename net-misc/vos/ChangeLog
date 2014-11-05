@@ -1,3 +1,9 @@
+*vos-1.10.5 (05 Nov 2014)
+
+  05 Nov 2014; Sebastien Fabbro <fabbros@gentoo.org> +vos-1.10.5.ebuild,
+  -vos-1.9.7.ebuild:
+  Version bump
+
 *vos-1.9.7 (08 Aug 2013)
 
   08 Aug 2013; Sébastien Fabbro <bicatali@gentoo.org> +vos-1.9.7.ebuild,
